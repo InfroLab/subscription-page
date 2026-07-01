@@ -142,3 +142,5 @@ docker-compose-local.yml
 /backend/.env
 
 /frontend/public/assets/.app-config-v2.json
+# local updater helper (edit IMAGE freely; stays out of git)
+patch.sh
