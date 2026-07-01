@@ -1,67 +1,60 @@
+/* Phone home-screen style: rounded-square app icon with the name beneath it.
+   Colours come from tokens defined in src/ru-theme.css. */
+
 .appsGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+    gap: 1rem;
     margin-bottom: var(--mantine-spacing-md);
 }
 
 .appButton {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex: 1 1 auto;
-    padding: 0 48px 0 16px;
-    height: 48px;
+    justify-content: flex-start;
+    height: auto;
     min-width: 0;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-left: 3px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--mantine-radius-md);
+    padding: 0.4rem 0;
+    gap: 0.5rem;
+    overflow: visible;
+    background: transparent;
+    border: 0;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .appButton:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-left-color: rgba(255, 255, 255, 0.25);
+    background: transparent;
 }
 
 .appButton:hover .bgIcon {
-    opacity: 0.3;
+    opacity: 1;
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
 }
 
-.appButtonActive,
-.appButtonActive:hover {
-    background: linear-gradient(90deg, rgba(34, 211, 238, 0.12) 0%, rgba(34, 211, 238, 0.04) 100%);
-    border-color: rgba(34, 211, 238, 0.2);
-    border-left-color: var(--mantine-color-cyan-5);
-    box-shadow:
-        inset 4px 0 12px -4px rgba(34, 211, 238, 0.3),
-        0 0 12px rgba(34, 211, 238, 0.1);
-}
-
-.appButtonActive .appName {
-    color: var(--mantine-color-cyan-3);
-}
-
-.appButtonActive .bgIcon,
-.appButtonActive:hover .bgIcon {
-    opacity: 0.25;
-}
-
+/* the brand glyph becomes an app icon on a rounded-square tile */
 .bgIcon {
-    position: absolute;
-    right: -12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 56px;
-    height: 56px;
-    opacity: 0.25;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    mask-image: linear-gradient(to right, transparent 0%, black 40%, black 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%, black 100%);
+    position: static;
+    transform: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.7rem;
+    opacity: 1;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    mask-image: none;
+    -webkit-mask-image: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .bgIcon svg,
@@ -70,10 +63,22 @@
     height: 100%;
 }
 
-.bgIconActive {
-    opacity: 0.25;
+/* glyph colour follows light/dark mode (never red) */
+.bgIcon svg {
+    color: var(--icon-glyph);
+}
+.bgIcon svg [fill='#FAFAFA'],
+.bgIcon svg [fill='white'] {
+    fill: var(--icon-glyph);
+}
+.bgIcon svg [stroke='#FAFAFA'],
+.bgIcon svg [stroke='white'] {
+    stroke: var(--icon-glyph);
 }
 
+.bgIconActive {
+    opacity: 1;
+}
 .bgIconActive svg,
 .bgIconActive svg path {
     width: 100%;
@@ -83,28 +88,49 @@
 .appName {
     position: relative;
     z-index: 1;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: var(--mantine-font-size-md);
-    font-weight: 600;
-    white-space: nowrap;
+    color: var(--text-main);
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 500;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
 }
 
+/* selected app: red ring on the icon tile + bolder red name */
+.appButtonActive,
+.appButtonActive:hover {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.appButtonActive .bgIcon,
+.appButtonActive:hover .bgIcon {
+    opacity: 1;
+    border-color: var(--red);
+    box-shadow: 0 0 0 2px var(--red);
+}
+
+.appButtonActive .appName {
+    color: var(--red);
+    font-weight: 700;
+}
+
+/* "recommended" dot at the top-right corner of the icon tile */
 .featuredBadge {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 8px;
-    height: 8px;
+    top: 0.1rem;
+    left: auto;
+    right: calc(50% - 1.75rem);
+    width: 0.55rem;
+    height: 0.55rem;
     display: inline-block;
-    opacity: 1;
-    z-index: 0;
+    z-index: 2;
     border-radius: 50%;
-    background: #efbf04;
-
-    box-shadow: 0 0 6px rgba(239, 191, 4, 0.6);
+    background: var(--featured);
+    box-shadow: 0 0 6px var(--featured);
 }
 
 .appButtonActive .featuredBadge {
-    opacity: 0.8;
-    box-shadow: 0 0 8px rgba(239, 191, 4, 0.4);
+    opacity: 1;
 }

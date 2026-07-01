@@ -1,0 +1,131 @@
+/* ============================================================
+   Infrays theme — colour/skin layer for the Remnawave subscription page.
+   Imported once (after global.css) in src/app.tsx, so it wins the cascade.
+   DARK = neutral professional grey (default) · LIGHT = pale latte.
+   Follows the OS colour scheme, dark by default.
+
+   Everything here rides on STABLE hooks (Mantine variables + `.mantine-*`
+   classes + the app's own global classes), so it survives upstream updates.
+   Per-component structural styling (phone app tiles) lives in the matching
+   *.module.css files.
+   ============================================================ */
+
+/* ---------- DARK (neutral, professional) : default ---------- */
+:root{
+  --bg:            #17181a;
+  --surface:       #212327;
+  --surface-2:     #292b30;
+  --surface-hover: #26282c;
+  --border:        #ffffff14;
+  --border-strong: #ffffff2b;
+  --text-main:     #e8eaed;
+  --text-minor:    #9aa0a6;
+  --accent:        #c6ccd4;
+  --accent-soft:   #ffffff10;
+  --red:           #ff5c60;   /* brand red — Установка buttons + selected app */
+  --red-soft:      rgba(255,92,96,.16);
+  --red-soft-hover:rgba(255,92,96,.26);
+  --featured:      #c0a765;
+  --vignette:      rgba(0,0,0,.42);
+  --icon-glyph:    var(--text-main);
+}
+
+/* ---------- LIGHT (pale latte) : only when the OS is in light mode ---------- */
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#efe7d9; --surface:#f7f1e7; --surface-2:#ece2d2; --surface-hover:#f1eadd;
+    --border:#00000016; --border-strong:#0000002b; --text-main:#2a2723; --text-minor:#8a8377;
+    --accent:#8a7355; --accent-soft:#00000010; --featured:#b07d1e;
+    --red:#d6373c; --red-soft:rgba(214,55,60,.12); --red-soft-hover:rgba(214,55,60,.2);
+    --vignette:rgba(0,0,0,.09); --icon-glyph:var(--text-main);
+  }
+}
+
+/* ---------- remap Mantine's colour variables onto the tokens ---------- */
+:root{
+  --mantine-color-white:          var(--text-main);
+  --mantine-color-text:           var(--text-main);
+  --mantine-color-dimmed:         var(--text-minor);
+  --mantine-color-body:           var(--bg);
+  --mantine-color-default:        var(--surface);
+  --mantine-color-default-hover:  var(--surface-hover);
+  --mantine-color-default-border: var(--border);
+  --mantine-color-default-color:  var(--text-main);
+  --mantine-color-cyan-0:  var(--accent);
+  --mantine-color-cyan-3:  var(--accent);
+  --mantine-color-cyan-5:  var(--accent);
+  --mantine-color-cyan-filled: var(--accent);
+  --mantine-color-teal-0:  var(--accent);
+  --mantine-color-teal-filled: var(--accent);
+}
+
+/* ---------- backgrounds ---------- */
+html, body{
+  background-color: var(--bg) !important;
+  background-image: none !important;              /* remove the lattice grid */
+}
+.animated-background{                              /* one soft centre vignette */
+  background: radial-gradient(120% 120% at 50% 50%, transparent 58%, var(--vignette) 100%) !important;
+}
+.header-wrapper{
+  background: var(--surface) !important;           /* opaque, same as the cards */
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* ---------- cards / surfaces ---------- */
+.mantine-Card-root,
+.mantine-Paper-root{
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+.mantine-Card-root:hover{ border-color: var(--border-strong) !important; }
+/* neutralise the coloured info-card gradients defined in global.css */
+.info-card-cyan, .info-card-violet, .info-card-green,
+.info-card-red, .info-card-yellow, .info-card-blue{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* ---------- icon containers: rounded squares, neutral ---------- */
+.mantine-ThemeIcon-root{
+  border-radius: var(--mantine-radius-md) !important;
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  color: var(--text-minor) !important;
+}
+.mantine-ThemeIcon-root svg{ color: var(--text-minor) !important; stroke: currentColor !important; }
+
+/* ---------- header action buttons (link / telegram / language) ---------- */
+.mantine-ActionIcon-root{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-main) !important;              /* kills the telegram blue */
+}
+.mantine-ActionIcon-root:hover{ background: var(--surface-hover) !important; }
+.mantine-ActionIcon-root svg{ color: var(--text-main) !important; stroke: currentColor !important; }
+
+/* ---------- selector (platform picker) ---------- */
+.mantine-NativeSelect-input{
+  background: var(--surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--text-main) !important;
+}
+.mantine-NativeSelect-input option{
+  background: var(--surface); color: var(--text-main);
+  border-bottom: 1px solid var(--text-minor);
+}
+
+/* ---------- Установка action buttons -> red (light-variant buttons) ---------- */
+.mantine-Button-root[data-variant="light"]{
+  --button-bg: var(--red-soft) !important;
+  --button-hover: var(--red-soft-hover) !important;
+  --button-color: var(--red) !important;
+}
+
+/* ---------- QR code: always black on white, regardless of theme ---------- */
+.mantine-Modal-content svg{ background: #fff !important; }
+.mantine-Modal-content svg rect,
+.mantine-Modal-content svg path{ fill: #000 !important; stroke: #000 !important; }
+.mantine-Modal-content svg rect[fill="#fff"],
+.mantine-Modal-content svg rect[fill="#ffffff"]{ fill: #fff !important; }
