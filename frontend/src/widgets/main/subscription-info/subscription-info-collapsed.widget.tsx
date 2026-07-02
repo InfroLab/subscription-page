@@ -36,7 +36,7 @@ interface IProps {
 export const SubscriptionInfoCollapsedWidget = ({ isMobile }: IProps) => {
     const { t, currentLang, baseTranslations } = useTranslation()
     const subscription = useSubscription()
-    const [isExpanded, setIsExpanded] = useState(false)
+    const [isExpanded, setIsExpanded] = useState(true)
 
     const { user } = subscription
 
