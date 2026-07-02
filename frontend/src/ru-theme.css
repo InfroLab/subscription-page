@@ -30,15 +30,13 @@
   --icon-glyph:    var(--text-main);
 }
 
-/* ---------- LIGHT (pale latte) : only when the OS is in light mode ---------- */
-@media (prefers-color-scheme: light){
-  :root{
-    --bg:#efe7d9; --surface:#f7f1e7; --surface-2:#ece2d2; --surface-hover:#f1eadd;
-    --border:#00000016; --border-strong:#0000002b; --text-main:#2a2723; --text-minor:#8a8377;
-    --accent:#8a7355; --accent-soft:#00000010; --featured:#b07d1e;
-    --red:#d6373c; --red-soft:rgba(214,55,60,.12); --red-soft-hover:rgba(214,55,60,.2);
-    --vignette:rgba(0,0,0,.09); --icon-glyph:var(--text-main);
-  }
+/* ---------- LIGHT (pale latte) : when the theme toggle is set to light ---------- */
+:root[data-mantine-color-scheme='light']{
+  --bg:#efe7d9; --surface:#f7f1e7; --surface-2:#ece2d2; --surface-hover:#f1eadd;
+  --border:#00000016; --border-strong:#0000002b; --text-main:#2a2723; --text-minor:#8a8377;
+  --accent:#8a7355; --accent-soft:#00000010; --featured:#b07d1e;
+  --red:#d6373c; --red-soft:rgba(214,55,60,.12); --red-soft-hover:rgba(214,55,60,.2);
+  --vignette:rgba(0,0,0,.09); --icon-glyph:var(--text-main);
 }
 
 /* ---------- remap Mantine's colour variables onto the tokens ---------- */
@@ -79,6 +77,26 @@ html, body{
   border-color: var(--border) !important;
 }
 .mantine-Card-root:hover{ border-color: var(--border-strong) !important; }
+
+/* ---------- one merged panel (header + account + installation) ---------- */
+.ru-onepane{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--mantine-radius-lg) !important;
+  overflow: hidden !important;
+}
+/* the sections inside become flush rows, not separate cards */
+.ru-onepane .mantine-Card-root,
+.ru-onepane .mantine-Paper-root{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.ru-row-header{ padding: var(--mantine-spacing-md) var(--mantine-spacing-lg); }
+.ru-sep{ height: 1px; background: var(--border); }
+
+/* account info: one clean column of rows, not a grid of little panes */
+.ru-onepane .mantine-SimpleGrid-root{ grid-template-columns: 1fr !important; }
 /* neutralise the coloured info-card gradients defined in global.css */
 .info-card-cyan, .info-card-violet, .info-card-green,
 .info-card-red, .info-card-yellow, .info-card-blue{

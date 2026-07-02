@@ -1,4 +1,14 @@
-import { Box, Center, Container, Group, Image, Stack, Title } from '@mantine/core'
+import {
+    ActionIcon,
+    Box,
+    Card,
+    Container,
+    Group,
+    Image,
+    Title,
+    useMantineColorScheme
+} from '@mantine/core'
+import { IconMoon, IconSun } from '@tabler/icons-react'
 import { TSubscriptionPagePlatformKey } from '@remnawave/subscription-page-types'
 
 import {
@@ -36,6 +46,23 @@ const SUBSCRIPTION_INFO_BLOCK_RENDERERS = {
     hidden: null
 } as const
 
+const ThemeToggle = () => {
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+    const isLight = colorScheme === 'light'
+
+    return (
+        <ActionIcon
+            aria-label="Toggle color scheme"
+            onClick={() => toggleColorScheme()}
+            radius="md"
+            size="xl"
+            variant="default"
+        >
+            {isLight ? <IconMoon size={22} /> : <IconSun size={22} />}
+        </ActionIcon>
+    )
+}
+
 export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProps) => {
     const config = useAppConfig()
     const currentLang = useCurrentLang()
@@ -67,20 +94,23 @@ export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProp
 
     return (
         <Page>
-            <Box className="header-wrapper" py="md">
-                <Container maw={1200} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-                    <Group justify="space-between">
-                        <Group gap="sm" style={{ userSelect: 'none' }} wrap="nowrap">
+            <Container
+                maw={1200}
+                px={{ base: 'md', sm: 'lg', md: 'xl' }}
+                py="xl"
+                style={{ position: 'relative', zIndex: 1 }}
+            >
+                {/* everything lives in one connected panel */}
+                <Card className="ru-onepane" p={0} radius="lg">
+                    {/* header row: logo · brand · link/telegram · language · theme */}
+                    <Group className="ru-row-header" justify="space-between" wrap="nowrap">
+                        <Group gap="sm" style={{ userSelect: 'none', minWidth: 0 }} wrap="nowrap">
                             {hasCustomLogo ? (
                                 <Image
                                     alt="logo"
                                     fit="contain"
                                     src={config.brandingSettings.logoUrl}
-                                    style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        flexShrink: 0
-                                    }}
+                                    style={{ width: '32px', height: '32px', flexShrink: 0 }}
                                 />
                             ) : (
                                 <RemnawaveLogo c="cyan" size={32} />
@@ -95,46 +125,45 @@ export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProp
                             </Title>
                         </Group>
 
-                        <SubscriptionLinkWidget
-                            hideGetLink={config.baseSettings.hideGetLinkButton}
-                            supportUrl={config.brandingSettings.supportUrl}
-                        />
+                        <Group gap="xs" wrap="nowrap">
+                            <SubscriptionLinkWidget
+                                hideGetLink={config.baseSettings.hideGetLinkButton}
+                                supportUrl={config.brandingSettings.supportUrl}
+                            />
+                            <LanguagePicker
+                                currentLang={currentLang}
+                                locales={config.locales}
+                                onLanguageChange={setLanguage}
+                            />
+                            <ThemeToggle />
+                        </Group>
                     </Group>
-                </Container>
-            </Box>
 
-            <Container
-                maw={1200}
-                px={{ base: 'md', sm: 'lg', md: 'xl' }}
-                py="xl"
-                style={{ position: 'relative', zIndex: 1 }}
-            >
-                <Stack gap="xl">
                     {SubscriptionInfoBlockRenderer && (
-                        <SubscriptionInfoBlockRenderer isMobile={isMobile} />
+                        <>
+                            <Box className="ru-sep" />
+                            <Box px={{ base: 'sm', xs: 'md', sm: 'lg' }} py="md">
+                                <SubscriptionInfoBlockRenderer isMobile={isMobile} />
+                            </Box>
+                        </>
                     )}
 
                     {atLeastOnePlatformApp && (
-                        <InstallationGuideConnector
-                            BlockRenderer={
-                                BLOCK_RENDERERS[config.uiConfig.installationGuidesBlockType]
-                            }
-                            hasPlatformApps={hasPlatformApps}
-                            isMobile={isMobile}
-                            platform={platform}
-                        />
+                        <>
+                            <Box className="ru-sep" />
+                            <InstallationGuideConnector
+                                BlockRenderer={
+                                    BLOCK_RENDERERS[config.uiConfig.installationGuidesBlockType]
+                                }
+                                hasPlatformApps={hasPlatformApps}
+                                isMobile={isMobile}
+                                platform={platform}
+                            />
+                        </>
                     )}
 
                     <RawKeysWidget isMobile={isMobile} />
-
-                    <Center>
-                        <LanguagePicker
-                            currentLang={currentLang}
-                            locales={config.locales}
-                            onLanguageChange={setLanguage}
-                        />
-                    </Center>
-                </Stack>
+                </Card>
             </Container>
         </Page>
     )
